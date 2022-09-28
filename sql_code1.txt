@@ -1,0 +1,86 @@
+--NEW SCRIPT FOR ASSIGNMENT
+WITH VAR1 AS
+(
+SELECT t2.TRANSCATION_DATE, 
+       T2.TYPE_
+       FROM PASSBOOK t1 
+LEFT OUTER JOIN PASSBOOK t2
+    ON t1.TRANSCATION_DATE <= t2.TRANSCATION_DATE
+WHERE t1.TYPE_ IN ('CR','DB')  
+GROUP BY t2.TRANSCATION_DATE,t2.TYPE_
+)
+SELECT * FROM VAR1
+WHERE (TRANSCATION_DATE >= '01-01-2022' AND TRANSCATION_DATE <= '06-01-2022')
+ORDER BY TRANSCATION_DATE; 
+--new script 1
+select * from passbook;
+insert into passbook values(to_date('05-01-22','DD-MM-YY'),'NUPUR','CR','10000');
+commit;
+rollback;
+update passbook set transcation_date='06-01-22' where amount=10000;
+--NEW SCRIPT FOR ASSIGNMENT
+select transcation_date,acc_no,type_,amount,sum(Balence) over(partition by acc_no ) 
+from (select transcation_date,acc_no,type_,amount, 
+case when type_='CR' then AMOUNT
+     else Amount * -1
+     end Balence
+     from passbook);
+select transcation_date,acc_no,type_,amount, 
+case when type_='CR' then AMOUNT
+     else Amount * -1
+     end Balence
+     from passbook;
+--partition data    
+select rn2,
+rn,
+country_id
+from
+(
+select rank() over(order by country_id asc)as rn,
+      rank() over (partition by country_id order by city_id asc )as rn2,
+      country_id as country_id,
+      city_id
+      from city
+order by country_id asc
+)
+--where rn2 =1;
+--using row number and rank;
+select ROW_NUMBER() over(order by country_id) as new,country,country_id from country;
+select row_number() over(order by country_id asc) as rn,row_number() over(partition by country_id order by city_id asc) as rn2,
+country_id as country_id,
+city_id
+from city
+order by country_id asc;
+--dense rank 
+select dense_rank() over(order by country_id asc) as rn,
+dense_rank() over(partition by country_id order 
+                  by city_id asc) as rn2,
+                  city_id
+,country_id as country_id,
+city_id
+from city
+order by country_id asc;
+--self join example , 3rd highest salary..
+select salary,first_name,last_name from employees t1 
+where 3=(select distinct(count(salary))
+from employees t2
+where t1.salary < t2.salary);
+--here 3 represent 3rd highest salary;
+-- creating a view..
+create or replace view emp_view
+as
+(select rn2,
+rn,
+country_id
+from
+(
+select rank() over(order by country_id asc)as rn,
+      rank() over (partition by country_id order by city_id asc )as rn2,
+      country_id as country_id,
+      city_id
+      from city
+order by country_id asc
+)
+);
+--to see the created view
+select * from emp_view;
