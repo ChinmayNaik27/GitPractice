@@ -1,0 +1,5 @@
+Spark Architecture link document:
+https://us06st-cf.zoom.us/web_client/6orpgrb/html/externalLinkPage.html?ref=https://blog.knoldus.com/understanding-how-spark-runs-on-yarn-with-hdfs/
+
+
+new fileddn

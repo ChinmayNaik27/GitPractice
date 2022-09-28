@@ -1,0 +1,4 @@
+a=int(input('Enter No:'))
+b=int(input('Enter sencond No:')
+c=a+b
+print ('Your Addittion  is: ',str(c)
